@@ -42,6 +42,7 @@ make load            # Load CSVs to Snowflake
 make transform       # Run dbt models
 make test            # Run all tests
 make docs            # Generate dbt documentation
+make docs-serve      # Serve dbt documentation
 
 # Cleanup
 make clean           # Remove data files
@@ -60,4 +61,3 @@ make clean           # Remove data files
 - [Architecture](ARCHITECTURE.md) - System design and data flow
 - [Assumptions](ASSUMPTIONS.md) - Decisions made during implementation
 - [Questions](QUESTIONS.md) - Clarifications for product team
-- **dbt Docs** - Run `make docs-serve` to browse data model documentation and lineage
