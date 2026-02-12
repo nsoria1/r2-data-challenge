@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: dim_stores
+    description: "Store dimension - latest version per store"
+    columns:
+      - name: store_token
+        description: "Unique store identifier (primary key)"
+        tests:
+          - unique
+          - not_null
+      - name: store_group
+        description: "Store group"
+      - name: store_name
+        description: "Store name"
+        tests:
+          - not_null
+      - name: _batch_date
+        description: "Batch date from source file"
+      - name: _loaded_at
+        description: "When this version was loaded"
+      - name: _source_file
+        description: "Source CSV filename"
+
+  - name: fact_sales
+    description: "Sales transactions - deduplicated by store and transaction ID"
+    columns:
+      - name: store_token
+        description: "Store identifier (composite key)"
+        tests:
+          - not_null
+      - name: transaction_id
+        description: "Transaction identifier (composite key)"
+        tests:
+          - not_null
+      - name: transaction_time
+        description: "When transaction occurred"
+        tests:
+          - not_null
+      - name: amount
+        description: "Transaction amount"
+        tests:
+          - not_null
+      - name: receipt_token
+        description: "Receipt token"
+      - name: user_role
+        description: "User role"
+        tests:
+          - not_null
+      - name: _batch_date
+        description: "Batch date from source file"
+      - name: _loaded_at
+        description: "When this version was loaded"
+      - name: _source_file
+        description: "Source CSV filename"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - store_token
+            - transaction_id

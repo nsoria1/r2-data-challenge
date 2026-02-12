@@ -1,0 +1,57 @@
+name: 'r2_assessment'
+version: '1.0.0'
+config-version: 2
+
+# Profile configuration
+profile: 'r2_assessment'
+
+# Paths
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+# Target directory
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+# Model configurations
+models:
+  r2_assessment:
+    # Staging layer - views for validation
+    staging:
+      +materialized: view
+      +schema: staging
+      
+    # Core layer - incremental tables for deduplication
+    core:
+      +materialized: incremental
+      +schema: core
+      +on_schema_change: "fail"
+      
+    # Reporting layer - views for final outputs
+    reporting:
+      +materialized: view
+      +schema: reporting
+
+# Global configurations
+vars:
+  # Timezone for timestamp conversions
+  timezone: 'America/New_York'
+  
+  # Batch processing
+  batch_date: "{{ var('batch_date', modules.datetime.date.today().isoformat()) }}"
+
+# Quoting
+quoting:
+  database: false
+  schema: false
+  identifier: false
+
+# Seeds configuration
+seeds:
+  +quote_columns: false

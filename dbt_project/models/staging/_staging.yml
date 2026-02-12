@@ -1,0 +1,74 @@
+version: 2
+
+sources:
+  - name: raw
+    database: R2_ASSESSMENT
+    schema: raw
+    tables:
+      - name: raw_stores
+        description: "Raw stores data loaded from CSV files"
+        columns:
+          - name: store_group
+            description: "Store group"
+          - name: store_token
+            description: "Unique store identifier"
+          - name: store_name
+            description: "Store name"
+          - name: _batch_date
+            description: "Batch date extracted from filename (YYYYMMDD)"
+          - name: _loaded_at
+            description: "Timestamp when record was loaded"
+          - name: _source_file
+            description: "Source CSV filename"
+
+      - name: raw_sales
+        description: "Raw sales transactions loaded from CSV files"
+        columns:
+          - name: store_token
+            description: "Store identifier"
+          - name: transaction_id
+            description: "Transaction identifier"
+          - name: receipt_token
+            description: "Receipt token"
+          - name: transaction_time
+            description: "Transaction timestamp (string, to be parsed)"
+          - name: amount
+            description: "Transaction amount (string with $ formatting)"
+          - name: user_role
+            description: "Role of user who made transaction"
+          - name: _batch_date
+            description: "Batch date extracted from filename (YYYYMMDD)"
+          - name: _loaded_at
+            description: "Timestamp when record was loaded"
+          - name: _source_file
+            description: "Source CSV filename"
+
+models:
+  - name: stg_stores
+    description: "Validated stores from raw layer"
+    columns:
+      - name: store_group
+      - name: store_token
+      - name: store_name
+      - name: _batch_date
+      - name: _loaded_at
+      - name: _source_file
+      - name: is_valid
+        description: "True if all validations pass"
+
+  - name: stg_sales
+    description: "Validated and parsed sales transactions"
+    columns:
+      - name: store_token
+      - name: transaction_id
+      - name: receipt_token
+      - name: user_role
+      - name: transaction_time
+        description: "Parsed timestamp"
+      - name: amount
+        description: "Parsed decimal amount"
+      - name: _batch_date
+      - name: _loaded_at
+      - name: _source_file
+      - name: is_valid
+        description: "True if all validations pass"
